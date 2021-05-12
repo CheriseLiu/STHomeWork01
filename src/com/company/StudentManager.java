@@ -1,5 +1,4 @@
 package com.company;
-import java.util.*;
 
 import java.util.Scanner;
 
@@ -8,11 +7,16 @@ import java.util.Scanner;
  * @Description:
  * @Date: 22:35 2021/4/24
  */
+
 public class StudentManager {
     static Student[] Stu = new Student[100];
     static int number=0;
     static Scanner scanner = new Scanner(System.in);
 
+    /**
+     * app方法
+     * 负责程序的整个控制流程（首先输出选择菜单，等待用户输入选项；然后根据选项执行相应操作）
+     */
     public static void app(){
         int choice;
         while(true){
@@ -26,19 +30,24 @@ public class StudentManager {
             System.out.println("*             6  退出             *");
             System.out.println("***********************************");
             choice=scanner.nextInt();
-            if (choice>6)break;
+            if (choice>=6)break;
             switch (choice){
                 case 1: add();break;
                 case 2: query();break;
                 case 3: delete();break;
                 case 4: update();break;
                 case 5: findAll();break;
-                case 6: break;
+                //case 6: break;问题编码39
+                default: break;
             }
         }
         System.out.println("感谢您对本系统的使用，欢迎下次继续使用");
     }
 
+    /**
+     * add方法
+     * 用于对学生信息的添加
+     */
     static void add(){
         while(true){
             System.out.println("点击任意键继续添加学生信息，停止添加输入0");
@@ -54,57 +63,104 @@ public class StudentManager {
         }
     }
 
+    /**
+     * query方法
+     * 用于对学生信息的查询
+     */
     static void query(){
-        System.out.println("请输入要修改信息的学生姓名");
-        String name = scanner.next();
-        for(int i=0;i<number;i++){
-            if (name.equals(Stu[i].getName())){
-                System.out.println("*******************************************");
-                System.out.println("学号  姓名       出生日期     性别(女性为true，男性为false)");
-                System.out.println(Stu[i].getID()+"\t"+Stu[i].getName()+"\t"+Stu[i].getBirDate()+"\t"+Stu[i].isGender());
-                System.out.println("*******************************************");
+        if(Stu[0] == null|| Stu.length <= 0){
+            System.out.println("请先添加学生信息");
+            return;
+        }
+        else {
+            System.out.println("请输入要查询的学生姓名");
+            String name = scanner.next();
+            for(int i=0;i<number;i++){
+                if (name.equals(Stu[i].getName())){
+                    System.out.println("*******************************************");
+                    System.out.println("学号  姓名       出生日期     性别(女性为true，男性为false)");
+                    System.out.println(Stu[i].getID() + "\t" + Stu[i].getName() + "\t" +
+                            Stu[i].getBirDate() + "\t" + Stu[i].isGender());
+                    System.out.println("*******************************************");
+                }
+                if (number==i)System.out.println("对不起查无此人");
             }
-            if (number==i)System.out.println("对不起查无此人");
+            return;
         }
     }
 
+    /**
+     * delete方法
+     * 用于对学生信息的删除
+     */
     static void delete(){
-        System.out.println("请输入要删除信息的学生姓名");
-        String name=scanner.next();
-        int i;
-        for (i=0;i<number;i++){
-            if (name.equals(Stu[i].getName()))break;;
-            if (number==i)System.out.println("对不起查无此人");
+        if(Stu[0] == null|| Stu.length <= 0){
+            System.out.println("请先添加学生信息");
+            return;
         }
-        for (;i<number-1;i++){
-            Stu[i]=Stu[i+1];
-            number--;
-        }
-        System.out.println("删除完成");
-    }
-
-    static void update(){
-        System.out.println("请输入要修改信息的学生姓名");
-        String name = scanner.next();
-        for (int i=0;i<number;i++){
-            if (name.equals(Stu[i].getName())){
-                System.out.println("请输入要修改的学生的信息:学号，姓名，出生日期，性别(女性为true，男性为false)");
-                Stu[i].setID(scanner.nextInt());
-                Stu[i].setName(scanner.next());
-                Stu[i].setBirDate(scanner.next());
-                Stu[i].setGender(scanner.nextBoolean());
-                break;
+        else {
+            System.out.println("请输入要删除信息的学生姓名");
+            String name=scanner.next();
+            int i;
+            for (i=0;i<number;i++){
+                if (name.equals(Stu[i].getName()))break;;
+                if (number==i)System.out.println("对不起查无此人");
             }
-            if (number==i)System.out.println("对不起查无此人");
+            for (;i<number-1;i++){
+                Stu[i]=Stu[i+1];
+                number--;
+            }
+            System.out.println("删除完成");
+            return;
         }
     }
 
+    /**
+     * update方法
+     * 用于对学生信息的修改
+     */
+    static void update(){
+        if(Stu[0] == null|| Stu.length <= 0){
+            System.out.println("请先添加学生信息");
+            return;
+        }
+        else {
+            System.out.println("请输入要修改信息的学生姓名");
+            String name = scanner.next();
+            for (int i=0;i<number;i++){
+                if (name.equals(Stu[i].getName())){
+                    System.out.println("请输入要修改的学生的信息:学号，姓名，出生日期，" +
+                            "性别(女性为true，男性为false)");
+                    Stu[i].setID(scanner.nextInt());
+                    Stu[i].setName(scanner.next());
+                    Stu[i].setBirDate(scanner.next());
+                    Stu[i].setGender(scanner.nextBoolean());
+                    break;
+                }
+                if (number==i)System.out.println("对不起查无此人");
+            }
+            return;
+        }
+    }
+
+    /**
+     * findAll方法
+     * 用于对所以学生信息的输出
+     */
     static void findAll() {
-        System.out.println("*******************************************");
-        System.out.println("学号  姓名       出生日期     性别(女性为true，男性为false)");
-        for (int i = 0; i < number; i++)
-            System.out.println(Stu[i].getID() + "\t" + Stu[i].getName() + "\t" + Stu[i].getBirDate() + "\t" + Stu[i].isGender());
-        System.out.println("*******************************************");
-        System.out.println();
+        if(Stu[0] == null|| Stu.length <= 0){
+            System.out.println("请先添加学生信息");
+            return;
+        }
+        else {
+            System.out.println("*******************************************");
+            System.out.println("学号  姓名       出生日期     性别(女性为true，男性为false)");
+            for (int i = 0; i < number; i++)
+                System.out.println(Stu[i].getID() + "\t" + Stu[i].getName() + "\t" +
+                        Stu[i].getBirDate() + "\t" + Stu[i].isGender());
+            System.out.println("*******************************************");
+            System.out.println();
+            return;
+        }
     }
 }
